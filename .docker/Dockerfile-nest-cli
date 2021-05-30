@@ -1,0 +1,27 @@
+FROM node:12.13.0-stretch-slim
+
+RUN npm install -g typescript
+RUN npm install -g @nestjs/cli
+RUN npm install -g rimraf
+RUN npm install -g copyfiles
+RUN npm install -g prettier
+RUN npm install -g ts-node
+# tar and bzip2 are required to install for phantomJs, libfontconfig for use it
+# git nano installed in case of debug
+RUN apt-get update && apt-get install -y \
+	tar \
+	bzip2 \
+	libfontconfig \
+	nano \
+	git \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN \
+apt-get update -y && \
+apt-get install python3-pip -y && \
+pip3 install bs4 && \
+pip3 install requests && \
+apt-get install python3-lxml -y && \
+pip3 install Pillow && \
+apt-get install libopenjp2-7 -y && \
+apt-get install libtiff5 -y
