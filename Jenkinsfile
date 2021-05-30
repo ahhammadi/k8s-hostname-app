@@ -49,8 +49,8 @@ pipeline {
                     script {
                         withDockerRegistry(credentialsId: 'jenkins-harbor', url: 'https://harbor.aptar.dev') {
                             def imageTag = "${env.TAG_NAME}";
-                            docker.build("harbor.aptar.dev/atom/edge/atom-electrons:${imageTag}", "-f ./electrons/Dockerfile.arm32v7 .").push();
-                        }
+                            docker.build("docker push ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push();
+                        
                     }
                 }
             }
