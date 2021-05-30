@@ -47,10 +47,8 @@ pipeline {
             steps {
                 dir("${customWorkSpace}"){
                     script {
-                        withDockerRegistry(credentialsId: 'jenkins-harbor', url: 'https://harbor.aptar.dev') {
-                            def imageTag = "${env.TAG_NAME}";
-                            docker.build("docker push ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push();
-                        
+                        def imageTag = "${env.TAG_NAME}";
+                        docker.build("docker push ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
                     }
                 }
             }
