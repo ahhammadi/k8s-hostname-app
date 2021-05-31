@@ -37,6 +37,7 @@ pipeline {
                             packageJSON.version = env.TAG_NAME.replace('v', '');
                             writeJSON file: 'package.json', json: packageJSON
                         }
+                        sh 'sudo chown -R 111:117 "/.npm"'
                         sh 'npm install'
                         sh 'npm run build'
                         sh 'rm -rf dist'
