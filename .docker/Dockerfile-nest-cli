@@ -1,5 +1,5 @@
 FROM node:12.13.0-stretch-slim
-RUN sudo chown -R 111:117 "/.npm"
+
 RUN npm install -g typescript
 RUN npm install -g @nestjs/cli
 RUN npm install -g rimraf
