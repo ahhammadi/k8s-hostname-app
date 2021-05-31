@@ -30,7 +30,7 @@ pipeline {
             }
             steps {
                 echo 'Build app stage'
-                 dir("${customWorkSpace}") {
+                 dir("${WORKSPACE}") {
                      script {
                         if (env.TAG_NAME != null) {
                             def packageJSON = readJSON file: 'package.json'
