@@ -29,17 +29,21 @@ pipeline {
                 }
             }
             steps {
-                script {
-                    if (env.TAG_NAME != null) {
-                        def packageJSON = readJSON file: 'package.json'
-                        packageJSON.version = env.TAG_NAME.replace('v', '');
-                        writeJSON file: 'package.json', json: packageJSON
+                echo 'Build app stage'
+                 dir("${customWorkSpace}") {
+                     script {
+                        if (env.TAG_NAME != null) {
+                            def packageJSON = readJSON file: 'package.json'
+                            packageJSON.version = env.TAG_NAME.replace('v', '');
+                            writeJSON file: 'package.json', json: packageJSON
+                        }
+                        sh 'npm install'
+                        sh 'npm run build'
+                        sh 'rm -rf dist'
+                        sh 'rm -rf node_modules'
                     }
-                    sh 'npm install'
-                    sh 'npm run build'
-                    sh 'rm -rf dist'
-                    sh 'rm -rf node_modules'
-                }
+                 }
+                
             }
         }
         // Build docker image
