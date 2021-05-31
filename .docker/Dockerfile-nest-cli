@@ -6,10 +6,6 @@ RUN npm install -g rimraf
 RUN npm install -g copyfiles
 RUN npm install -g prettier
 RUN npm install -g ts-node
-RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz \
-  && tar xzvf docker-17.04.0-ce.tgz \
-  && mv docker/docker /usr/local/bin \
-  && rm -r docker docker-17.04.0-ce.tgz
 # tar and bzip2 are required to install for phantomJs, libfontconfig for use it
 # git nano installed in case of debug
 RUN apt-get update && apt-get install -y \
