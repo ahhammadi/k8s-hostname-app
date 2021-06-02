@@ -56,7 +56,7 @@ pipeline {
             steps {
                 dir("./"){
                     script {
-                        def imageTag = "${env.TAG_NAME}";
+                        def imageTag = "1.1.0";
                         docker.build("docker push ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
                     }
                 }
