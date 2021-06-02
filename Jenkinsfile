@@ -56,7 +56,7 @@ pipeline {
             steps {
                 dir("./"){
                     script {
-                        withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials', url: 'https://hub.docker.com/repository/docker/ahhammadi/k8s-hostname') {
+                        withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials') {
                             def imageTag = "1.1.0";
                             docker.build("ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
                         }
