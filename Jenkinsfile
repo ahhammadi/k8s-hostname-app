@@ -54,7 +54,7 @@ pipeline {
         // Build docker image
         stage('Build docker') {
             steps {
-                dir("${customWorkSpace}"){
+                dir("./"){
                     script {
                         def imageTag = "${env.TAG_NAME}";
                         docker.build("docker push ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
@@ -73,7 +73,6 @@ pipeline {
                     cleanWs()
                     def VERSION = env.TAG_NAME.replace('v', '');
                     git 'https://github.com/ahhammadi/k8s-hostname-charts.git'
-                    //customWorkSpace = "${WORKSPACE}"
                     updateHelmcharts("${WORKSPACE}/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com"
                     sh "git config --global user.name Hammadi}"
