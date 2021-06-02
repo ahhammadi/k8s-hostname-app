@@ -57,7 +57,7 @@ pipeline {
                 dir("./"){
                     script {
                         def imageTag = "1.1.0";
-                        docker.build("ahhammadi/k8s-hostname:${imageTag}", "Dockerfile .").push()
+                        docker.build("ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
                     }
                 }
             }
