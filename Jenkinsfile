@@ -17,6 +17,11 @@ def updateHelmcharts(String path){
     }
 }
 pipeline {
+
+    environment {
+        HOME = "${WORKSPACE}"
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+    }
     agent any
     stages {
         // build  app / tests
