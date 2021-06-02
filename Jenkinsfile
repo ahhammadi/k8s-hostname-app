@@ -56,8 +56,10 @@ pipeline {
             steps {
                 dir("./"){
                     script {
-                        def imageTag = "1.1.0";
-                        docker.build("ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
+                        withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials', url: 'https://hub.docker.com/repository/docker/ahhammadi/k8s-hostname') {
+                            def imageTag = "1.1.0";
+                            docker.build("ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
+                        }
                     }
                 }
             }
