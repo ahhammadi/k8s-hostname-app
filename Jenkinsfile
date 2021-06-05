@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    def VERSION = env.TAG_NAME.replace('v', '');
+                    def VERSION = "1.1.0";
                     git 'https://github.com/ahhammadi/k8s-hostname-charts.git'
                     updateHelmcharts("${WORKSPACE}/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com"
