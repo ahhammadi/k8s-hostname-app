@@ -56,6 +56,8 @@ pipeline {
             steps {
                 dir("./"){
                     script {
+                        //docker hub url is registry_url = "https://index.docker.io/v1/" 
+                        // it is the defult url we don't need to set it for docker hub repo
                         withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials') {
                             def imageTag = "1.1.0";
                             docker.build("ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
@@ -67,7 +69,7 @@ pipeline {
         stage('update helm charts') {
             when {
                 expression {
-                    env.TAG_NAME != null
+                    env.BRANCH_NAME == 'master'
                 }
             }
             steps {
@@ -80,6 +82,23 @@ pipeline {
                     sh "git config --global user.name Hammadi}"
                     sh("git add . && git commit -m 'Jenkins: bump helm charts  version to ${env.TAG_NAME}' && git push -u origin master")
                 }
+            }
+        }
+        // deploy  helm chart
+        stage("deploy  helm chart") {  
+            agent {
+                node {
+                        label 'kubepods' 
+                     }
+            }
+             when {
+                expression {
+                    env.BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                echo 'deploy  helm chart';
+                sh "helm upgrade k8s-hostname  -n k8s-hostname"
             }
         }
     }
