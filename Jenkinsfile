@@ -10,8 +10,8 @@ def updateHelmcharts(String path){
         writeYaml(file: "${dest}/values.yaml", data: valueData)
 
         def chartData = readYaml(file: "${dest}/Chart.yaml");
-        chartData.version = VERSION
-        valueData.appVersion = VERSION
+        chartData.version = "1.1.0"
+        valueData.appVersion = "1.1.0"
         sh "rm -f ${dest}/Chart.yaml"
         writeYaml(file: "${dest}/Chart.yaml", data: chartData)
     }
