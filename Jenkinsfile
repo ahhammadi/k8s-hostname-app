@@ -79,7 +79,7 @@ pipeline {
                     cleanWs()
                     //def VERSION = "1.1.0";
                     sh "git clone https://github.com/ahhammadi/k8s-hostname-charts.git";
-                    updateHelmcharts("${WORKSPACE}/charts");
+                    updateHelmcharts("/var/lib/jenkins/workspace/Demo-Pipeline_master/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com";
                     sh "git config --global user.name Hammadi}";
                     sh("git add . && git commit -m 'Jenkins: bump helm charts  version to ${VERSION}' && git push -u origin master");
