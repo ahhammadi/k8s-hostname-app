@@ -78,11 +78,11 @@ pipeline {
                 script {
                     cleanWs()
                     //def VERSION = "1.1.0";
-                    git 'https://github.com/ahhammadi/k8s-hostname-charts.git'
+                    sh "git clone https://github.com/ahhammadi/k8s-hostname-charts.git";
                     updateHelmcharts("${WORKSPACE}/charts");
-                    sh "git config --global user.email ah_hammadi@hotmail.com"
-                    sh "git config --global user.name Hammadi}"
-                    sh("git add . && git commit -m 'Jenkins: bump helm charts  version to ${VERSION}' && git push -u origin master")
+                    sh "git config --global user.email ah_hammadi@hotmail.com";
+                    sh "git config --global user.name Hammadi}";
+                    sh("git add . && git commit -m 'Jenkins: bump helm charts  version to ${VERSION}' && git push -u origin master");
                 }
             }
         }
