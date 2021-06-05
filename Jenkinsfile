@@ -1,17 +1,17 @@
 def updateHelmcharts(String path){
-    if (!fileExists("${path}/${env.TAG_NAME}")) {
+    if (!fileExists("${path}/${VERSION}")) {
         def source = "${path}/Source"
-        def dest = "${path}/${env.TAG_NAME}"
+        def dest = "${path}/${VERSION}"
 
         sh " cp -a -r ${source} ${dest}"
         def valueData = readYaml(file: "${dest}/values.yaml");
-        valueData.image.tag = "${env.TAG_NAME}"
+        valueData.image.tag = "${VERSION}"
         sh "rm -f ${dest}/values.yaml"
         writeYaml(file: "${dest}/values.yaml", data: valueData)
 
         def chartData = readYaml(file: "${dest}/Chart.yaml");
-        chartData.version = "1.1.0"
-        valueData.appVersion = "1.1.0"
+        chartData.version = VERSION
+        valueData.appVersion = VERSION
         sh "rm -f ${dest}/Chart.yaml"
         writeYaml(file: "${dest}/Chart.yaml", data: chartData)
     }
@@ -21,6 +21,7 @@ pipeline {
     environment {
         HOME = "${WORKSPACE}"
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+        VERSION = "0.0.0"
     }
     agent any
     stages {
@@ -37,11 +38,7 @@ pipeline {
                 echo 'Build app stage';
                  dir("./") {
                      script {
-                        if (env.TAG_NAME != null) {
-                            def packageJSON = readJSON file: 'package.json'
-                            packageJSON.version = env.TAG_NAME.replace('v', '');
-                            writeJSON file: 'package.json', json: packageJSON
-                        }
+                        
                         sh 'npm install'
                         sh 'npm run build'
                         sh 'rm -rf dist'
@@ -59,7 +56,12 @@ pipeline {
                         //docker hub url is registry_url = "https://index.docker.io/v1/" 
                         // it is the defult url we don't need to set it for docker hub repo
                         withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials') {
-                            def imageTag = "1.1.0";
+                            if (env.BRANCH_NAME =="master") {
+                            def packageJSON = readJSON file: 'package.json'
+                            VERSION = packageJSON.version ;
+                            writeJSON file: 'package.json', json: packageJSON
+                        }
+                            def imageTag = VERSION;
                             docker.build("ahhammadi/k8s-hostname:${imageTag}", "-f ./Dockerfile .").push()
                         }
                     }
@@ -75,12 +77,12 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    def VERSION = "1.1.0";
+                    //def VERSION = "1.1.0";
                     git 'https://github.com/ahhammadi/k8s-hostname-charts.git'
                     updateHelmcharts("${WORKSPACE}/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com"
                     sh "git config --global user.name Hammadi}"
-                    sh("git add . && git commit -m 'Jenkins: bump helm charts  version to ${env.TAG_NAME}' && git push -u origin master")
+                    sh("git add . && git commit -m 'Jenkins: bump helm charts  version to ${VERSION}' && git push -u origin master")
                 }
             }
         }
