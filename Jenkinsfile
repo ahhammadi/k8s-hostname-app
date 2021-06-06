@@ -78,13 +78,7 @@ pipeline {
                 script {
                     cleanWs()
                     //def VERSION = "1.1.0";
-                    //git 'https://github.com/ahhammadi/k8s-hostname-charts.git'
-                     withCredentials([string(credentialsId: 'githubAccessToken', variable: 'SECRET')]) {
-                        access_token = "${SECRET}"
-                    }
-
-          
-                    sh "git clone https://github.com:${access_token}@k8s-hostname-charts.git"
+                    git (url:'https://github.com/ahhammadi/k8s-hostname-charts.git',credentialsId: 'githubcredentials')
                     updateHelmcharts("${WORKSPACE}/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com"
                     sh "git config --global user.name Hammadi}"
