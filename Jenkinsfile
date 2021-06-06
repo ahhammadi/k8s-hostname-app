@@ -1,7 +1,7 @@
 def updateHelmcharts(String path){
     if (!fileExists("${path}/${VERSION}")) {
         def source = "${path}/Source"
-        def dest = "${path}/v ${VERSION}"
+        def dest = "${path}/${VERSION}"
 
         sh " cp -a -r ${source} ${dest}"
         def valueData = readYaml(file: "${dest}/values.yaml");
