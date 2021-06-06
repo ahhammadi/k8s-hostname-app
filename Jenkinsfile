@@ -22,6 +22,10 @@ pipeline {
         HOME = "${WORKSPACE}"
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         VERSION = "0.0.0"
+        rancherApiUrl = 'https://sgdcran02.aptargroup.loc/v3'
+        rancherAppName = 'amlrt-backgroundjob'
+        rancherContext= 'p-dq6vk:amlrt-backgroundjob'
+        rancherCatalogName = 'p-dq6vk:amlrt-charts'
     }
     agent any
     stages {
@@ -95,5 +99,23 @@ pipeline {
             }
         }
 
-    }
+        stage('Update Rancher Catalog and Upgrade App') {
+            when {
+                expression { rancherAppName != '' && rancherContext != '' }
+            }
+            steps {
+                script {
+                    def currentchartFile = "${intialchartFolder}V${buildNumber}/Chart.yaml"
+                    def chartData = readYaml(file:currentchartFile)
+                    def appVersion =  chartData.version
+
+                    withCredentials([string(credentialsId: 'rancher-access-token', variable: 'SECRET')]) {
+                        rancherApiToken = "${SECRET}"
+                    }
+                    sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 login $rancherApiUrl --token $rancherApiToken --skip-verify --context p-dq6vk:amlrt-backgroundjob"
+                    sh "curl -k --location --request POST '${rancherApiUrl}/projectCatalogs/$rancherCatalogName?action=refresh' --header 'Authorization: Bearer ${rancherApiToken}'"
+                    sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 app upgrade $rancherAppName $appVersion"
+                }
+            }
+        }
 }
