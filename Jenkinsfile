@@ -50,17 +50,16 @@ pipeline {
         }
         // Build docker image
         stage('Build docker') {
+            when {
+                expression {
+                    env.BRANCH_NAME == 'master'
+                }
+            }
             steps {
                 dir("./"){
                     script {
                         //docker hub url is registry_url = "https://index.docker.io/v1/" 
                         // it is the defult url we don't need to set it for docker hub repo
-                        /*
-                        usernameVariable
-                        passwordVariable
-                        credentialsId
-
-                        */
                         withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials') {
                             if (env.BRANCH_NAME =="master") {
                             def packageJSON = readJSON file: 'package.json'
@@ -83,7 +82,6 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    //def VERSION = "1.1.0";https://{username}:{password}@github.com/{username}/project.git
                     withCredentials([usernamePassword(credentialsId: 'githubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         username = "${USERNAME}"
                         password = "${PASSWORD}"
