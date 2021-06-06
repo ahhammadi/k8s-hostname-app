@@ -1,7 +1,7 @@
 def updateHelmcharts(String path){
     if (!fileExists("${path}/${VERSION}")) {
         def source = "${path}/Source"
-        def dest = "${path}/${VERSION}"
+        def dest = "${path}/v ${VERSION}"
 
         sh " cp -a -r ${source} ${dest}"
         def valueData = readYaml(file: "${dest}/values.yaml");
@@ -55,6 +55,12 @@ pipeline {
                     script {
                         //docker hub url is registry_url = "https://index.docker.io/v1/" 
                         // it is the defult url we don't need to set it for docker hub repo
+                        /*
+                        usernameVariable
+                        passwordVariable
+                        credentialsId
+
+                        */
                         withDockerRegistry(credentialsId: 'Hammadi_Docker_Credentials') {
                             if (env.BRANCH_NAME =="master") {
                             def packageJSON = readJSON file: 'package.json'
@@ -78,7 +84,11 @@ pipeline {
                 script {
                     cleanWs()
                     //def VERSION = "1.1.0";https://{username}:{password}@github.com/{username}/project.git
-                    git ('https://ahhammadi:37087893ah_ans@github.com/ahhammadi/k8s-hostname-charts.git');//,credentialsId: 'githubcredentials')
+                    withCredentials([string(credentialsId: 'githubcredentials', usernameVariable: 'usr',passwordVariable:'passwrd')]) {
+                        username = "${usr}"
+                        password = "${passwrd}"
+                    }
+                    git ("https://${username}:${password}@github.com/ahhammadi/k8s-hostname-charts.git");
                     updateHelmcharts("${WORKSPACE}/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com"
                     sh "git config --global user.name Hammadi}"
