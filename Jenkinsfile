@@ -84,9 +84,9 @@ pipeline {
                 script {
                     cleanWs()
                     //def VERSION = "1.1.0";https://{username}:{password}@github.com/{username}/project.git
-                    withCredentials([string(credentialsId: 'githubcredentials', usernameVariable: 'usr',passwordVariable:'passwrd')]) {
-                        username = "${usr}"
-                        password = "${passwrd}"
+                    withCredentials([usernamePassword(credentialsId: 'githubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        username = "${USERNAME}"
+                        password = "${PASSWORD}"
                     }
                     git ("https://${username}:${password}@github.com/ahhammadi/k8s-hostname-charts.git");
                     updateHelmcharts("${WORKSPACE}/charts");
@@ -96,22 +96,6 @@ pipeline {
                 }
             }
         }
-        // deploy  helm chart
-        stage("deploy  helm chart") {  
-            agent {
-                node {
-                        label 'kubepods' 
-                     }
-            }
-             when {
-                expression {
-                    env.BRANCH_NAME == 'master'
-                }
-            }
-            steps {
-                echo 'deploy  helm chart';
-                sh "helm upgrade k8s-hostname  -n k8s-hostname"
-            }
-        }
+
     }
 }
