@@ -77,8 +77,8 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    //def VERSION = "1.1.0";
-                    git (url:'https://github.com/ahhammadi/k8s-hostname-charts.git',credentialsId: 'githubcredentials')
+                    //def VERSION = "1.1.0";https://{username}:{password}@github.com/{username}/project.git
+                    git ('https://ahhammadi:37087893ah_ans@github.com/ahhammadi/k8s-hostname-charts.git');//,credentialsId: 'githubcredentials')
                     updateHelmcharts("${WORKSPACE}/charts");
                     sh "git config --global user.email ah_hammadi@hotmail.com"
                     sh "git config --global user.name Hammadi}"
