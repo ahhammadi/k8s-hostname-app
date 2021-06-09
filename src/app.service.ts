@@ -4,6 +4,6 @@ import * as os from 'os';
 @Injectable()
 export class AppService {
   getHostName(): string {
-    return `Host Name is ${os.hostname()} for v (1.3.0).`;
+    return `Host Name is ${os.hostname()} for v (1.4.0).`;
   }
 }

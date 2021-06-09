@@ -22,10 +22,10 @@ pipeline {
         HOME = "${WORKSPACE}"
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         VERSION = "0.0.0"
-        rancherApiUrl = 'https://sgdcran02.aptargroup.loc/v3'
-        rancherAppName = 'amlrt-backgroundjob'
-        rancherContext= 'p-dq6vk:amlrt-backgroundjob'
-        rancherCatalogName = 'p-dq6vk:amlrt-charts'
+        rancherApiUrl = 'https://40.87.103.114/v3'
+        rancherAppName = 'k8s-hostname'
+        rancherContext= 'p-28htm:k8s-hostname'
+        rancherCatalogName = 'p-28htm:k8s-hostname-k8s-hostname'
     }
     agent any
     stages {
@@ -101,7 +101,9 @@ pipeline {
 
         stage('Update Rancher Catalog and Upgrade App') {
             when {
-                expression { rancherAppName != '' && rancherContext != '' }
+                expression {
+                    env.BRANCH_NAME == 'master' 
+                }
             }
             steps {
                 script {
@@ -114,7 +116,7 @@ pipeline {
                     }
                     sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 login $rancherApiUrl --token $rancherApiToken --skip-verify --context p-dq6vk:amlrt-backgroundjob"
                     sh "curl -k --location --request POST '${rancherApiUrl}/projectCatalogs/$rancherCatalogName?action=refresh' --header 'Authorization: Bearer ${rancherApiToken}'"
-                    sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 app upgrade $rancherAppName $appVersion"
+                    sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 app upgrade $rancherAppName $VERSION"
                 }
             }
         }
