@@ -89,7 +89,7 @@ pipeline {
         stage('Check For New Helm'){
             steps {
                 script {
-                    updateHelmcharts("${WORKSPACE}/charts");
+                    CheckForNewHelm();
                 }
             }   
         }
