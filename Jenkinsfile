@@ -107,10 +107,6 @@ pipeline {
             }
             steps {
                 script {
-                    def currentchartFile = "${intialchartFolder}V${buildNumber}/Chart.yaml"
-                    def chartData = readYaml(file:currentchartFile)
-                    def appVersion =  chartData.version
-
                     withCredentials([string(credentialsId: 'rancher-access-token', variable: 'SECRET')]) {
                         rancherApiToken = "${SECRET}"
                     }
