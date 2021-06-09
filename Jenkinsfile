@@ -1,3 +1,11 @@
+def CheckForNewHelm(){
+    if (!fileExists("${path}/${VERSION}")) {
+        NEW_HELM_VERSION = true
+    }
+    else{
+        NEW_HELM_VERSION = false
+    }   
+}
 def updateHelmcharts(String path){
     if (!fileExists("${path}/${VERSION}")) {
         def source = "${path}/Source"
@@ -22,6 +30,7 @@ pipeline {
         HOME = "${WORKSPACE}"
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         VERSION = "0.0.0"
+        NEW_HELM_VERSION = false
         rancherApiUrl = 'https://40.87.103.114/v3'
         rancherAppName = 'k8s-hostname'
         rancherContext= 'c-xd6fl:p-28htm'
@@ -77,10 +86,17 @@ pipeline {
                 }
             }
         }
+        stage('Check For New Helm'){
+            steps {
+                script {
+                    updateHelmcharts("${WORKSPACE}/charts");
+                }
+            }   
+        }
         stage('update helm charts') {
             when {
                 expression {
-                    env.BRANCH_NAME == 'master'
+                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION
                 }
             }
             steps {
@@ -102,7 +118,7 @@ pipeline {
         stage('Update Rancher Catalog and Upgrade App') {
             when {
                 expression {
-                    env.BRANCH_NAME == 'master' 
+                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION
                 }
             }
             steps {
