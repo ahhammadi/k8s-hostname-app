@@ -98,7 +98,7 @@ pipeline {
         stage('update helm charts') {
             when {
                 expression {
-                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION ==true
+                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == false
                 }
             }
             steps {
@@ -120,7 +120,7 @@ pipeline {
         stage('Update Rancher Catalog and Upgrade App') {
             when {
                 expression {
-                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == true
+                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == false
                 }
             }
             steps {
