@@ -24,8 +24,8 @@ pipeline {
         VERSION = "0.0.0"
         rancherApiUrl = 'https://40.87.103.114/v3'
         rancherAppName = 'k8s-hostname'
-        rancherContext= 'p-28htm:k8s-hostname'
-        rancherCatalogName = 'p-28htm:k8s-hostname-k8s-hostname'
+        rancherContext= 'c-xd6fl:p-28htm'
+        rancherCatalogName = 'p-28htm:k8s-hostname'
     }
     agent any
     stages {
