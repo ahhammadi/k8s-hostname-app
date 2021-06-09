@@ -110,7 +110,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'rancher-access-token', variable: 'SECRET')]) {
                         rancherApiToken = "${SECRET}"
                     }
-                    sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 login $rancherApiUrl --token $rancherApiToken --skip-verify --context p-dq6vk:amlrt-backgroundjob"
+                    sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 login $rancherApiUrl --token $rancherApiToken --skip-verify --context $rancherContext"
                     sh "curl -k --location --request POST '${rancherApiUrl}/projectCatalogs/$rancherCatalogName?action=refresh' --header 'Authorization: Bearer ${rancherApiToken}'"
                     sh "docker run --rm -v /tmp:/root/.rancher/ rancher/cli2 app upgrade $rancherAppName $VERSION"
                 }
