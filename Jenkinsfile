@@ -1,10 +1,9 @@
 def CheckForNewHelm(){
-    if (!fileExists("${path}/${VERSION}")) {
-        NEW_HELM_VERSION = true
-
+    if (fileExists("${path}/${VERSION}")) {
+        NEW_HELM_VERSION = false
     }
     else{
-        NEW_HELM_VERSION = false
+        NEW_HELM_VERSION = true
     }
     echo "New Helm Version exists equal ${NEW_HELM_VERSION}"   
 }
