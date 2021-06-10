@@ -1,4 +1,5 @@
 def CheckForNewHelm(){
+    echo "Check for path ${path}/${VERSION}";
     if (fileExists("${path}/${VERSION}")) {
         NEW_HELM_VERSION = false
     }
