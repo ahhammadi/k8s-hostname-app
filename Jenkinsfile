@@ -6,7 +6,7 @@ def CheckForNewHelm(){
     else{
         NEW_HELM_VERSION = false
     }
-    echo "Version exists equal ${NEW_HELM_VERSION}"   
+    echo "New Helm Version exists equal ${NEW_HELM_VERSION}"   
 }
 def updateHelmcharts(String path){
     if (!fileExists("${path}/${VERSION}")) {
@@ -98,7 +98,7 @@ pipeline {
         stage('update helm charts') {
             when {
                 expression {
-                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == false
+                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == true
                 }
             }
             steps {
@@ -120,7 +120,7 @@ pipeline {
         stage('Update Rancher Catalog and Upgrade App') {
             when {
                 expression {
-                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == false
+                    env.BRANCH_NAME == 'master' && NEW_HELM_VERSION == true
                 }
             }
             steps {
