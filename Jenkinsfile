@@ -1,5 +1,5 @@
 def CheckForNewHelm(){
-    echo "Check for path ${path}/${VERSION}";
+    echo "Check for path : ${WORKSPACE}/charts/${VERSION}";
     if (fileExists("${WORKSPACE}/charts/${VERSION}")) {
         NEW_HELM_VERSION = false
     }
