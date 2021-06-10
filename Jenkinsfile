@@ -91,6 +91,12 @@ pipeline {
         stage('Check For New Helm'){
             steps {
                 script {
+                    cleanWs()
+                    withCredentials([usernamePassword(credentialsId: 'githubcredentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        username = "${USERNAME}"
+                        password = "${PASSWORD}"
+                    }
+                    git ("https://${username}:${password}@github.com/ahhammadi/k8s-hostname-charts.git");
                     CheckForNewHelm();
                 }
             }   
