@@ -5,6 +5,6 @@ import * as packageJson from '../package.json';
 @Injectable()
 export class AppService {
   getHostName(): string {
-    return `Host Name is ${os.hostname()} for v (${packageJson.version}).`;
+    return `Host Name is ${os.hostname()} for v (${packageJson.version}) ***.`;
   }
 }
